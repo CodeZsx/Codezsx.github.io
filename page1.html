@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>❤️</title>
+    <link rel="icon" type="image/x-ico" href="imgs/ico_64.ico">
+    <style type="text/css">
+        body {
+            background: white;
+        }
+
+        .heart {
+            margin: 300px auto;
+            position: relative;
+            width: 200px;
+            height: 200px;
+            /* border: 1px solid #0094ff; */
+            animation-name: shake;
+            animation-duration: 2.5s;
+            animation-iteration-count: infinite;
+        }
+
+        .heart div {
+            /* border: 1px solid #0094ff; */
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            background: pink;
+            animation-name: shadow;
+            animation-duration: 2.5s;
+            animation-iteration-count: infinite;
+        }
+
+        .topLeft,
+        .topRight {
+            border-radius: 100px 100px 0 0;
+        }
+
+        .topLeft {
+            transform: translate(-50px, 0) rotate(-45deg);
+        }
+
+        .topRight {
+            transform: translate(50px, 0) rotate(45deg);
+        }
+
+        .bottom {
+            transform: translate(0, 64px) rotate(45deg) scale(.9, .9);
+        }
+        .top {
+            font-family: 'Inconsolata', sans-serif;
+            font-weight: bold;
+            font-size: 2.0em;
+            text-transform: uppercase;
+            color: pink;
+        }
+        .top span{
+            height: 50px;
+            width: 200px;
+            text-align: center;
+            left: 50%;
+            margin-left: -100px;
+            position: absolute;
+            top: 230px;
+            animation: bounce 2.5s infinite;
+        }
+        /* 定义动画 */
+        @keyframes shake {
+            /*0% {*/
+            /*transform: scale(.8, .8);*/
+            /*}*/
+            /*50% {*/
+            /*transform: scale(1.6, 1.6);*/
+            /*}*/
+            /*100% {*/
+            /*transform: scale(.8, .8);*/
+            /*}*/
+            0% {
+                transform: scale(1);
+            }
+            5% {
+                transform: scale(1.3);
+            }
+            10% {
+                transform: scale(1.1);
+            }
+            15% {
+                transform: scale(1.5);
+            }
+            50% {
+                transform: scale(1);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+        @keyframes bounce {
+            0% {
+                top:230px;
+            }
+            10% {
+                top:190px;
+            }
+            15% {
+                top:210px;
+            }
+            20% {
+                top:190px;
+            }
+            75% {
+                top:230px;
+            }
+            100% {
+                top:230px;
+            }
+        }
+
+        @keyframes shadow {
+            from {}
+            to {
+                box-shadow: 0px 0px 50px pink;
+            }
+        }
+        .love_word {
+
+        }
+        .love_word p{
+            widows: 100%;
+            text-align: center;
+        }
+        .love_word .line1{
+            color: #fff2dc;
+        }
+        .love_word .line2{
+            color: #ffefdb;
+        }
+        .love_word .line3{
+            color: #ffe7ba;
+        }
+        .love_word .line4{
+            color: pink;
+        }
+    </style>
+</head>
+<body>
+<div id="page_splash" style="display: none">
+    <div class="top">
+        <span>peng  peng</span>
+    </div>
+    <div class="heart">
+        <div class="topLeft"></div>
+        <div class="topRight"></div>
+        <div class="bottom"></div>
+    </div>
+    <div class="love_word">
+        <p class="line1">英语: I love you (爱拉乌油)</p>
+        <p class="line2">日本: 爱している (阿姨兮带路)</p>
+        <p class="line3">朝鲜: Tangsinul sarang ha yo (3朗嗨哟)</p>
+        <p class="line4">汉语: 我爱你</p>
+        <p class="line3">泰国：Ch'an Rak Khun (千软昆)</p>
+        <p class="line2">德语：Ich liebe dich (衣西里拔弟兮)</p>
+        <p class="line1">法语：Je t'aime Je t'adore (也带嘛)</p>
+    </div>
+</div>
+</body>
+<script type="text/javascript">
+
+    //    var test = window.location.href;
+    //    console.info(test);
+    //    alert(test);
+
+    //    var time;
+    //    window.onload = function () {
+    //        time = window.setInterval("hideSplash()", 3000);
+    //    };
+    //    function hideSplash() {
+    //        var divSplash = document.getElementById("page_splash");
+    //        divSplash.style.display = "none";
+    //        window.clearInterval(time);
+    //    }
+</script>
+</html>
