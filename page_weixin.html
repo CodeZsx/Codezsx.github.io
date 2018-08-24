@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>❤️</title>
+    <link rel="icon" type="image/x-ico" href="imgs/ico_64.ico">
+    <script src="js/jquery-3.3.1.js"></script>
+    <style>
+        .round_rectangle_shadow{
+            width: 80%;
+            height: 500px;
+            border-radius: 8px;
+            margin: 100px auto;
+            -webkit-box-shadow:0px 0px 10px #c8c8c8 ;
+            -moz-box-shadow:0px 0px 10px #c8c8c8 ;
+            box-shadow:0px 0px 20px #dddddd ;
+        }
+        .weixin_area{
+            background-color: #eeeeee;
+            padding: 10px 0;
+        }
+        .chat{
+            padding: 0 19px;
+        }
+        .msg_item{
+            margin-bottom: 16px;
+        }
+        .me{
+        }
+        .you{
+        }
+        .avatar{
+            width: 40px;
+            height: 40px;
+            border-radius: 2px;
+            -moz-border-radius: 2px;
+            -webkit-border-radius: 2px;
+            cursor: pointer;
+        }
+        .me .avatar{
+            float: right;
+        }
+        .you .avatar{
+            float: left;
+        }
+        .content{
+        }
+        .me .content{
+            text-align: right;
+        }
+        .you .content{
+            text-align: left;
+        }
+        .bubble{
+            max-width: 400px;
+            min-height: 1em;
+            display: inline-block;
+            vertical-align: top;
+            position: relative;
+            text-align: left;
+            font-size: 14px;
+            border-radius: 3px;
+            -moz-border-radius: 3px;
+            -webkit-border-radius: 3px;
+            margin: 0 10px;
+        }
+        .me .bubble_primary{
+            background-color: #b2e281;
+        }
+        .you .bubble_primary{
+            background-color: #ffffff;
+        }
+        .me .bubble:before, .me .bubble:after{
+            left: 100%;
+        }
+        .you .bubble:before, .you .bubble:after{
+            right: 100%;
+        }
+        .bubble:before, .bubble:after{
+            position: absolute;
+            top:14px;
+            border: 6px solid transparent;
+            content: " ";
+        }
+        .me .bubble.bubble_primary:before, .me .bubble.bubble_primary:after{
+            border-left-color: #b2e281;
+            border-left-width: 4px;
+        }
+        .you .bubble.bubble_primary:before, .you .bubble.bubble_primary:after{
+            border-right-color: #ffffff;
+            border-right-width: 4px;
+        }
+        .bubble_cont{
+            word-wrap: break-word;
+            word-break: break-all;
+            min-height: 25px;
+        }
+        .bubble_cont .plain{
+            padding: 9px 13px;
+        }
+        pre{
+            margin: 0;
+            font-family: inherit;
+            font-size: inherit;
+            white-space: pre-wrap;
+            word-break: normal;
+        }
+        .datetime{
+            text-align: center;
+            margin: 10px auto;
+            max-width: 50%;
+        }
+        .datetime .content{
+            display: inline-block;
+            font-size: 12px;
+            padding: 1px 18px;
+            color: #b2b2b2;
+            border-radius: 2px;
+            -moz-border-radius: 2px;
+            -webkit-border-radius: 2px;
+        }
+    </style>
+</head>
+<body>
+<div class="round_rectangle_shadow weixin_area" id="weixin_area">
+    <!--<div class="datetime">-->
+        <!--<div class="content">22:52</div>-->
+    <!--</div>-->
+    <!--<div class="chat">-->
+        <!--<div class="msg_item me">-->
+            <!--<img class="avatar" src="imgs/pic_avatar_me.jpg">-->
+            <!--<div class="content">-->
+                <!--<div class="bubble bubble_primary">-->
+                    <!--<div class="bubble_cont">-->
+                        <!--<div class="plain">-->
+                            <!--<pre></pre>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
+    <!--<div class="chat">-->
+        <!--<div class="msg_item you">-->
+            <!--<img class="avatar" src="imgs/pic_avatar_du.jpg">-->
+            <!--<div class="content">-->
+                <!--<div class="bubble bubble_primary">-->
+                    <!--<div class="bubble_cont">-->
+                        <!--<div class="plain">-->
+                            <!--<pre></pre>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
+</div>
+</body>
+<script type="text/javascript">
+    $.getJSON("file/wx_chat_record.json", "", function (data) {
+        console.info("data:" + data);
+        console.info("from:"+data['you']);
+        console.info("me:"+data['me']);
+        console.info("avatar:" + data['me_avatar']);
+        var youAvatar = data['you_avatar'];
+        var meAvatar = data['me_avatar'];
+        $.each(data['record'],function (i, item) {
+            var type = item['type'];
+            if(type==0||type==1){
+                var avatar = type == 0 ? youAvatar : meAvatar;
+                var style = type == 0 ? 'you' : 'me';
+                var msg_item = '<div class="chat">\n' +
+                    '        <div class="msg_item '+style+'">\n' +
+                    '            <img class="avatar" src="'+avatar+'">\n' +
+                    '            <div class="content">\n' +
+                    '                <div class="bubble bubble_primary">\n' +
+                    '                    <div class="bubble_cont">\n' +
+                    '                        <div class="plain">\n' +
+                    '                            <pre >'+item["text"]+'</pre>\n' +
+                    '                        </div>\n' +
+                    '                    </div>\n' +
+                    '                </div>\n' +
+                    '            </div>\n' +
+                    '        </div>\n' +
+                    '    </div>'
+                $('#weixin_area').append(msg_item);
+            } else if (type==2){
+                var item = '<div class="datetime">\n' +
+                    '        <div class="content">'+item["text"]+'</div>\n' +
+                    '    </div>'
+                $('#weixin_area').append(item);
+            }
+
+        })
+    })
+</script>
+</html>
