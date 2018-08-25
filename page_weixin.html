@@ -222,7 +222,7 @@
 </head>
 <body>
 <div class="round_rectangle_shadow" id="weixin_area">
-    <div class="record_area" id="record_area">
+    <div class="record_area">
     </div>
     <div class="input_area">
         <input type="text" class="input_box" readonly="readonly" value="" onclick="onInputBoxClick()"/>
@@ -281,6 +281,7 @@
 </body>
 <script type="text/javascript">
     var bottomFlag = false;
+    var sendFinish = false;
     init();
     function init() {
         changeDivHeight();
@@ -295,6 +296,9 @@
             var scrollTop = this.scrollTop;
             var scrollBottom = this.scrollHeight;
             if (scrollTop+visbleHeight>=scrollBottom) {
+                if (sendFinish){
+                    return;
+                }
                 $('.input_box').val("嗯嗯");
                 bottomFlag = true;
             }
@@ -304,7 +308,7 @@
     function changeDivHeight() {
         var h = document.documentElement.clientHeight;
         $("#weixin_area").css("height", h - 60).css("margin-top",30).css("margin-bottom",30);
-        $("#record_area").css("height", h - 60 - 40);
+        $(".record_area").css("height", h - 60 - 40);
     };
     //显示模式
     var left = 2;
@@ -346,7 +350,7 @@
                         '        </div>\n' +
                         '    </div>';
                 }
-                $('#record_area').append(msgItem);
+                $('.record_area').append(msgItem);
             });
             var datetimeItem = '<div class="datetime">\n' +
                 '        <div class="content">刚刚</div>\n' +
@@ -366,8 +370,8 @@
                 '            </div>\n' +
                 '        </div>\n' +
                 '    </div>';
-            $('#record_area').append(datetimeItem);
-            $('#record_area').append(msgItem);
+            $('.record_area').append(datetimeItem);
+            $('.record_area').append(msgItem);
         });
     }
     //input点击
@@ -392,7 +396,7 @@
         $.getJSON("file/wx_chat_record.json", "", function (data) {
             var avatar1 = data['avatar1'];
             var style = left==1?"you":"me";
-            var msgItem = '<div class="chat">\n' +
+            var msgItem = '<div class="chat" id="chat_yes">\n' +
                 '        <div class="msg_item '+style+'">\n' +
                 '            <img class="avatar" src="'+avatar1+'">\n' +
                 '            <div class="content">\n' +
@@ -406,8 +410,12 @@
                 '            </div>\n' +
                 '        </div>\n' +
                 '    </div>';
-            $('#record_area').append(msgItem);
+            $('.record_area').append(msgItem);
+            var scrollTop = $('.record_area')[0].scrollTop;
+            $('.record_area').animate({scrollTop:scrollTop+54},800);
             $('.input_box').val("");
+            bottomFlag = false;
+            sendFinish = true;
 //            $('.input_area').remove();
 //            var inputItem = '<div class="input_area">\n' +
 //                '        <input type="text" class="input_box" readonly="readonly" value=""/>\n' +
