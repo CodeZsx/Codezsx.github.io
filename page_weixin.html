@@ -2,22 +2,31 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,minimal-ui">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-touch-fullscreen" content="no">
     <title>❤️</title>
     <link rel="icon" type="image/x-ico" href="imgs/ico_64.ico">
     <script src="js/jquery-3.3.1.js"></script>
     <style>
         .round_rectangle_shadow{
-            width: 80%;
-            height: 500px;
-            border-radius: 8px;
-            margin: 100px auto;
+            width: 90%;
+            border-radius: 4px;
+            margin: 0 5%;
+            display: flex;
             -webkit-box-shadow:0px 0px 10px #c8c8c8 ;
             -moz-box-shadow:0px 0px 10px #c8c8c8 ;
-            box-shadow:0px 0px 20px #dddddd ;
+            box-shadow:0px 0px 20px #efefef ;
         }
-        .weixin_area{
+        #weixin_area{
             background-color: #eeeeee;
-            padding: 10px 0;
+            position: relative;
+        }
+        .record_area{
+            width: 100%;
+            flex: 1;
+            padding: 10px 0 0;
+            overflow: scroll;
         }
         .chat{
             padding: 0 19px;
@@ -46,9 +55,11 @@
         .content{
         }
         .me .content{
+            overflow: hidden;
             text-align: right;
         }
         .you .content{
+            overflow: hidden;
             text-align: left;
         }
         .bubble{
@@ -119,10 +130,113 @@
             -moz-border-radius: 2px;
             -webkit-border-radius: 2px;
         }
+        .comment{
+            width: 100%;
+            text-align: center;
+        }
+        .comment .shadow {
+            max-width: 80%;
+            margin: 10px auto 20px;
+            padding: 10px;
+            color: #ffffff;
+            font-size: 14px;
+            text-align: left;
+            background-color: #2F7BF6;
+            border-radius: 4px;
+            vertical-align: top;
+            word-break: break-all;
+            word-wrap: break-word;
+            -webkit-box-shadow: 0px 0px 20px #2F8BF6;
+            -moz-box-shadow: 0px 0px 20px #2F8BF6;
+            box-shadow: 0px 0px 20px #2F8BF6;
+        }
+        .comment .shadow img{
+            width: 16px;
+            height: 16px;
+            vertical-align: top;
+        }
+        .input_area {
+            width: 100%;
+            height: 30px;
+            padding: 5px 0;
+            left: 0px;
+            right: 0px;
+            position: absolute;
+            display: flex;
+            bottom: 0px;
+            background-color: #ffffff;
+        }
+        .input_area .input_box{
+            flex: 1;
+            height: 30px;
+            float: left;
+            margin: 0 10px;
+            text-indent: 4px;
+            caret-color: #42AD3E;
+            overflow: hidden;
+            outline: none;
+            border-top-width: 0px;
+            border-left-width: 0px;
+            border-right-width: 0px;
+            border-bottom-width: 1px;
+            border-bottom-color: #dddddd;
+        }
+        /*.input_area .input_box:focus{*/
+            /*outline: none;*/
+            /*border-top-width: 0px;*/
+            /*border-left-width: 0px;*/
+            /*border-right-width: 0px;*/
+            /*border-bottom-width: 1px;*/
+            /*border-bottom-color: #42AD3E;*/
+        /*}*/
+        .input_area .btn_send{
+            width: 40px;
+            height: 30px;
+            line-height: 30px;
+            float: right;
+            cursor: pointer;
+            margin-right: 10px;
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: lighter;
+            text-align: center;
+            background-color: #42AD3E;
+            border-radius: 2px;
+        }
+        .input_area .btn_send span{
+            margin: auto auto;
+        }
+        @keyframes twinking {
+            0%{
+                background-color: #42AD3E;
+            }
+            50%{
+                background-color: #377B34;
+            }
+            100%{
+                background-color: #42AD3E;
+            }
+        }
+
     </style>
 </head>
 <body>
-<div class="round_rectangle_shadow weixin_area" id="weixin_area">
+<div class="round_rectangle_shadow" id="weixin_area">
+    <div class="record_area" id="record_area">
+    </div>
+    <div class="input_area">
+        <input type="text" class="input_box" readonly="readonly" value="" onclick="onInputBoxClick()"/>
+        <div class="btn_send" id="btn_send" onclick="sendMsg()">
+            <span>发送</span>
+        </div>
+    </div>
+    <!--<div class="comment">-->
+        <!--<div class="shadow">-->
+            <!--<img src="imgs/ic_comment_label.png">-->
+            <!--</img>-->
+            <!--成为微信好友-->
+        <!--</div>-->
+    <!--</div>-->
     <!--<div class="datetime">-->
         <!--<div class="content">22:52</div>-->
     <!--</div>-->
@@ -155,43 +269,165 @@
         <!--</div>-->
     <!--</div>-->
 </div>
+<div style="text-align: center;width: 100%;display: none">
+    <form action="" id="forms">
+        <input name="type" type="radio" value="0"/>0
+        <input name="type" type="radio" value="1" checked/>1
+        <input name="type" type="radio" value="2"/>2
+        text:<input type="text" name="text" id="text"/>
+        <input type="submit" value="提交"/>
+    </form>
+</div>
 </body>
 <script type="text/javascript">
-    $.getJSON("file/wx_chat_record.json", "", function (data) {
-        console.info("data:" + data);
-        console.info("from:"+data['you']);
-        console.info("me:"+data['me']);
-        console.info("avatar:" + data['me_avatar']);
-        var youAvatar = data['you_avatar'];
-        var meAvatar = data['me_avatar'];
-        $.each(data['record'],function (i, item) {
-            var type = item['type'];
-            if(type==0||type==1){
-                var avatar = type == 0 ? youAvatar : meAvatar;
-                var style = type == 0 ? 'you' : 'me';
-                var msg_item = '<div class="chat">\n' +
-                    '        <div class="msg_item '+style+'">\n' +
-                    '            <img class="avatar" src="'+avatar+'">\n' +
-                    '            <div class="content">\n' +
-                    '                <div class="bubble bubble_primary">\n' +
-                    '                    <div class="bubble_cont">\n' +
-                    '                        <div class="plain">\n' +
-                    '                            <pre >'+item["text"]+'</pre>\n' +
-                    '                        </div>\n' +
-                    '                    </div>\n' +
-                    '                </div>\n' +
-                    '            </div>\n' +
-                    '        </div>\n' +
-                    '    </div>'
-                $('#weixin_area').append(msg_item);
-            } else if (type==2){
-                var item = '<div class="datetime">\n' +
-                    '        <div class="content">'+item["text"]+'</div>\n' +
-                    '    </div>'
-                $('#weixin_area').append(item);
+    var bottomFlag = false;
+    init();
+    function init() {
+        changeDivHeight();
+        loadRecordFromJson();
+        window.onresize = function () {
+            console.info("onload");
+            changeDivHeight();
+            $(".input_area").reload();
+        };
+        $(".record_area").scroll(function () {
+            var visbleHeight = document.documentElement.clientHeight;
+            var scrollTop = this.scrollTop;
+            var scrollBottom = this.scrollHeight;
+            if (scrollTop+visbleHeight>=scrollBottom) {
+                $('.input_box').val("嗯嗯");
+                bottomFlag = true;
             }
-
         })
-    })
+    }
+    //动态设置div的高度
+    function changeDivHeight() {
+        var h = document.documentElement.clientHeight;
+        $("#weixin_area").css("height", h - 60).css("margin-top",30).css("margin-bottom",30);
+        $("#record_area").css("height", h - 60 - 40);
+    };
+    //显示模式
+    var left = 2;
+    //从json加载聊天记录
+    function loadRecordFromJson() {
+        $.getJSON("file/wx_chat_record.json", "", function (data) {
+            var avatar1 = data['avatar1'];
+            var avatar2 = data['avatar2'];
+            $.each(data['record'],function (i, item) {
+                var type = item['type'];
+                var msgItem;
+                if(type==1||type==2){
+                    var avatar = type == 1 ? avatar1 : avatar2;
+                    var style = type == left ? 'you' : 'me';
+                    msgItem = '<div class="chat">\n' +
+                        '        <div class="msg_item '+style+'">\n' +
+                        '            <img class="avatar" src="'+avatar+'">\n' +
+                        '            <div class="content">\n' +
+                        '                <div class="bubble bubble_primary">\n' +
+                        '                    <div class="bubble_cont">\n' +
+                        '                        <div class="plain">\n' +
+                        '                            <pre >'+item["text"]+'</pre>\n' +
+                        '                        </div>\n' +
+                        '                    </div>\n' +
+                        '                </div>\n' +
+                        '            </div>\n' +
+                        '        </div>\n' +
+                        '    </div>';
+                } else if (type==0){
+                    msgItem = '<div class="datetime">\n' +
+                        '        <div class="content">'+item["text"]+'</div>\n' +
+                        '    </div>';
+                } else if (type==3){
+                    msgItem = '<div class="comment">\n' +
+                        '        <div class="shadow">\n' +
+                        '            <img src="imgs/ic_comment_label.png">\n' +
+                        '            </img>\n' +
+                        '            '+item["text"]+'\n' +
+                        '        </div>\n' +
+                        '    </div>';
+                }
+                $('#record_area').append(msgItem);
+            });
+            var datetimeItem = '<div class="datetime">\n' +
+                '        <div class="content">刚刚</div>\n' +
+                '    </div>';
+            var style = 2 == left ? 'you' : 'me';
+            var msgItem = '<div class="chat" id="important_word">\n' +
+                '        <div class="msg_item '+style+'">\n' +
+                '            <img class="avatar" src="'+avatar2+'">\n' +
+                '            <div class="content">\n' +
+                '                <div class="bubble bubble_primary">\n' +
+                '                    <div class="bubble_cont">\n' +
+                '                        <div class="plain">\n' +
+                '                            <pre>虽然认识时间不长，了解不多，但我还是想问：\n可以做我女朋友吗？</pre>\n' +
+                '                        </div>\n' +
+                '                    </div>\n' +
+                '                </div>\n' +
+                '            </div>\n' +
+                '        </div>\n' +
+                '    </div>';
+            $('#record_area').append(datetimeItem);
+            $('#record_area').append(msgItem);
+        });
+    }
+    //input点击
+    function onInputBoxClick() {
+        if (!bottomFlag){
+            return;
+        }
+        var btnSend = document.getElementById("btn_send");
+        btnSend.style.animation="twinking 1s 1";
+        btnSend.addEventListener("animationend", handle);
+        function handle() {
+            btnSend.removeEventListener("animationend", handle);
+            btnSend.style.animation = "";
+        }
+    }
+    //发送按钮点击事件
+    function sendMsg() {
+        if (!bottomFlag){
+            return;
+        }
+        var text = $('.input_box').val();
+        $.getJSON("file/wx_chat_record.json", "", function (data) {
+            var avatar1 = data['avatar1'];
+            var style = left==1?"you":"me";
+            var msgItem = '<div class="chat">\n' +
+                '        <div class="msg_item '+style+'">\n' +
+                '            <img class="avatar" src="'+avatar1+'">\n' +
+                '            <div class="content">\n' +
+                '                <div class="bubble bubble_primary">\n' +
+                '                    <div class="bubble_cont">\n' +
+                '                        <div class="plain">\n' +
+                '                            <pre id="yes">'+text+'</pre>\n' +
+                '                        </div>\n' +
+                '                    </div>\n' +
+                '                </div>\n' +
+                '            </div>\n' +
+                '        </div>\n' +
+                '    </div>';
+            $('#record_area').append(msgItem);
+            $('.input_box').val("");
+//            $('.input_area').remove();
+//            var inputItem = '<div class="input_area">\n' +
+//                '        <input type="text" class="input_box" readonly="readonly" value=""/>\n' +
+//                '        <div class="btn_send" onclick="sendMsg()">\n' +
+//                '            <span>发送</span>\n' +
+//                '        </div>\n' +
+//                '    </div>';
+//            $('#record_area').append(inputItem);
+        });
+    }
+    //添加json
+    $("#forms").submit(function () {
+        var type = $('input:radio:checked').val();
+        var text = $('input:text').val();
+        $.getJSON("file/wx_chat_record_write.json", function () {
+            data["record"].add("{}");
+            var file = new File("test","wx.json", {type: "text/plain;charset=utf-8"});
+        });
+        $('#text').val("");
+        return false;
+    });
 </script>
 </html>
