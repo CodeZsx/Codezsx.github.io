@@ -19,6 +19,8 @@
             animation-name: shake;
             animation-duration: 2.5s;
             animation-iteration-count: infinite;
+            -webkit-user-select: none;
+            -webkit-touch-callout: none;
         }
 
         .heart div {
@@ -163,11 +165,24 @@
         }, 2000);
     });
     $(".heart").mouseup(function () {
+        console.info("up");
         clearTimeout(timeout);
     });
     $(".heart").mouseout(function () {
+        console.info("out");
         clearTimeout(timeout);
     });
+    $(".heart").on("touchstart", function (e) {
+        e.preventDefault();
+        timeout = setTimeout(function (e) {
+            alert("You triggered the egg.");
+            window.location.href = 'page_weixin.html';
+        }, 2000);
+    });
+    $(".heart").on("touchend", function () {
+        clearTimeout(timeout);
+    });
+
     //    var test = window.location.href;
     //    console.info(test);
     //    alert(test);
