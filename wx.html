@@ -109,12 +109,20 @@
         .bubble_cont .plain{
             padding: 9px 13px;
         }
-        pre{
+        .bubble_cont .plain pre{
             margin: 0;
             font-family: inherit;
             font-size: inherit;
             white-space: pre-wrap;
             word-break: normal;
+        }
+        .bubble_cont .msg_img{
+            cursor: pointer;
+            display: block;
+            max-width: 350px;
+            max-height: 240px;
+            vertical-align: middle;
+            margin: 5px;
         }
         .datetime{
             text-align: center;
@@ -223,6 +231,45 @@
 <body>
 <div class="round_rectangle_shadow" id="weixin_area">
     <div class="record_area">
+        <!--<div class="comment">-->
+        <!--<div class="shadow">-->
+        <!--<img src="imgs/ic_comment_label.png">-->
+        <!--</img>-->
+        <!--成为微信好友-->
+        <!--</div>-->
+        <!--</div>-->
+        <!--<div class="datetime">-->
+        <!--<div class="content">22:52</div>-->
+        <!--</div>-->
+        <!--<div class="chat">-->
+            <!--<div class="msg_item me">-->
+                <!--<img class="avatar" src="imgs/pic_avatar_me.jpg">-->
+                <!--<div class="content">-->
+                    <!--<div class="bubble bubble_primary">-->
+                        <!--<div class="bubble_cont">-->
+                            <!--<img class="msg_img" src="imgs/pic_head.jpg"/>-->
+                            <!--<div class="plain">-->
+                            <!--<pre></pre>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--<div class="chat">-->
+        <!--<div class="msg_item you">-->
+        <!--<img class="avatar" src="imgs/pic_avatar_du.jpg">-->
+        <!--<div class="content">-->
+        <!--<div class="bubble bubble_primary">-->
+        <!--<div class="bubble_cont">-->
+        <!--<div class="plain">-->
+        <!--<pre></pre>-->
+        <!--</div>-->
+        <!--</div>-->
+        <!--</div>-->
+        <!--</div>-->
+        <!--</div>-->
+        <!--</div>-->
     </div>
     <div class="input_area">
         <input type="text" class="input_box" readonly="readonly" value="" onclick="onInputBoxClick()"/>
@@ -230,44 +277,6 @@
             <span>发送</span>
         </div>
     </div>
-    <!--<div class="comment">-->
-        <!--<div class="shadow">-->
-            <!--<img src="imgs/ic_comment_label.png">-->
-            <!--</img>-->
-            <!--成为微信好友-->
-        <!--</div>-->
-    <!--</div>-->
-    <!--<div class="datetime">-->
-        <!--<div class="content">22:52</div>-->
-    <!--</div>-->
-    <!--<div class="chat">-->
-        <!--<div class="msg_item me">-->
-            <!--<img class="avatar" src="imgs/pic_avatar_me.jpg">-->
-            <!--<div class="content">-->
-                <!--<div class="bubble bubble_primary">-->
-                    <!--<div class="bubble_cont">-->
-                        <!--<div class="plain">-->
-                            <!--<pre></pre>-->
-                        <!--</div>-->
-                    <!--</div>-->
-                <!--</div>-->
-            <!--</div>-->
-        <!--</div>-->
-    <!--</div>-->
-    <!--<div class="chat">-->
-        <!--<div class="msg_item you">-->
-            <!--<img class="avatar" src="imgs/pic_avatar_du.jpg">-->
-            <!--<div class="content">-->
-                <!--<div class="bubble bubble_primary">-->
-                    <!--<div class="bubble_cont">-->
-                        <!--<div class="plain">-->
-                            <!--<pre></pre>-->
-                        <!--</div>-->
-                    <!--</div>-->
-                <!--</div>-->
-            <!--</div>-->
-        <!--</div>-->
-    <!--</div>-->
 </div>
 <div style="text-align: center;width: 100%;display: none">
     <form action="" id="forms">
@@ -319,6 +328,7 @@
             var avatar2 = data['avatar2'];
             $.each(data['record'],function (i, item) {
                 var type = item['type'];
+                var url = item['url']
                 var msgItem;
                 if(type==1||type==2){
                     var avatar = type == 1 ? avatar1 : avatar2;
@@ -328,10 +338,15 @@
                         '            <img class="avatar" src="'+avatar+'">\n' +
                         '            <div class="content">\n' +
                         '                <div class="bubble bubble_primary">\n' +
-                        '                    <div class="bubble_cont">\n' +
-                        '                        <div class="plain">\n' +
-                        '                            <pre >'+item["text"]+'</pre>\n' +
-                        '                        </div>\n' +
+                        '                    <div class="bubble_cont">\n';
+                    if (url!=undefined&&url!=""){
+                        msgItem = msgItem + '<img class="msg_img" src="'+url+'"/>\n';
+                    }else{
+                        msgItem = msgItem + '<div class="plain">\n' +
+                            '                   <pre >'+item["text"]+'</pre>\n' +
+                            '                </div>\n';
+                    }
+                    msgItem = msgItem +
                         '                    </div>\n' +
                         '                </div>\n' +
                         '            </div>\n' +
