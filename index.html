@@ -166,9 +166,9 @@
 <script type="text/javascript">
     $(".heart").mousedown(function () {
         timeout = setTimeout(function () {
-            alert("You triggered the egg.");
+            // alert("You triggered the egg.");
             window.location.href = 'wx.html';
-        }, 2000);
+        }, 500);
     });
     $(".heart").mouseup(function () {
         console.info("up");
@@ -181,9 +181,9 @@
     $(".heart").on("touchstart", function (e) {
         e.preventDefault();
         timeout = setTimeout(function (e) {
-            alert("You triggered the egg.");
+            // alert("You triggered the egg.");
             window.location.href = 'wx.html';
-        }, 2000);
+        }, 500);
     });
     $(".heart").on("touchend", function () {
         clearTimeout(timeout);
